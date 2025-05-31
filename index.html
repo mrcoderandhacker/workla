@@ -3,468 +3,1085 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BuildEase - Dashboard</title>
+    <title>BuildEase 2.0 - Future of Construction</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
     <style>
-        /* Dashboard Page Specific Styles */
-        .post-project-card {
-            text-align: center;
-            padding: 40px 20px;
-            border: 2px dashed var(--gray-light);
-            cursor: pointer;
-            transition: all 0.3s;
+        .dashboard-container {
+        perspective: 1200px;
+    }
+    
+    .dashboard-mockup {
+        width: 100%;
+        height: 500px;
+        background: 
+            linear-gradient(rgba(10, 10, 18, 0.85), rgba(10, 10, 18, 0.85)),
+            url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');
+        background-size: cover;
+        background-position: center;
+        border-radius: 20px;
+        transform-style: preserve-3d;
+        transform: rotateX(8deg) rotateY(-3deg);
+        transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                    box-shadow 0.8s ease;
+        box-shadow: 0 45px 100px rgba(0, 240, 255, 0.15);
+        border: 1px solid rgba(0, 240, 255, 0.2);
+        position: relative;
+        overflow: hidden;
+        will-change: transform;
+    }
+    
+    .dashboard-mockup::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+            135deg,
+            rgba(0, 240, 255, 0.05) 0%,
+            rgba(123, 45, 255, 0.05) 100%
+        );
+        animation: dashboardShine 8s infinite;
+        z-index: 1;
+    }
+    
+    @keyframes dashboardShine {
+        0% { transform: translateX(-100%) skewX(-15deg); }
+        100% { transform: translateX(100%) skewX(-15deg); }
+    }
+    
+    .dashboard-mockup::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: radial-gradient(
+            circle at 70% 20%,
+            rgba(0, 240, 255, 0.15) 0%,
+            transparent 40%
+        );
+        z-index: 2;
+    }
+    
+    .dashboard-mockup:hover {
+        transform: rotateX(5deg) rotateY(0deg);
+        box-shadow: 0 60px 120px rgba(0, 240, 255, 0.25);
+    }
+    
+    /* Floating UI Elements */
+    .dashboard-element {
+        position: absolute;
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(5px);
+        border: 1px solid rgba(0, 240, 255, 0.3);
+        border-radius: 8px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        transition: all 0.5s ease;
+        z-index: 3;
+    }
+    
+    .dashboard-element-1 {
+        width: 180px;
+        height: 120px;
+        top: 15%;
+        left: 10%;
+        animation: floatElement 6s ease-in-out infinite;
+    }
+    
+    .dashboard-element-2 {
+        width: 220px;
+        height: 150px;
+        bottom: 20%;
+        right: 10%;
+        animation: floatElement 8s ease-in-out infinite 1s;
+    }
+    
+    .dashboard-element-3 {
+        width: 150px;
+        height: 200px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        animation: floatElement 7s ease-in-out infinite 0.5s;
+    }
+    
+    @keyframes floatElement {
+        0%, 100% { transform: translateY(0) translateX(0); }
+        50% { transform: translateY(-15px) translateX(10px); }
+    }
+    
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .dashboard-mockup {
+            height: 350px;
+            transform: rotateX(5deg);
         }
         
-        .post-project-card:hover {
-            border-color: var(--primary);
-            background-color: rgba(79, 70, 229, 0.03);
+        .dashboard-mockup:hover {
+            transform: rotateX(5deg);
         }
-        
-        .post-project-icon {
-            width: 60px;
-            height: 60px;
-            background-color: rgba(79, 70, 229, 0.1);
-            border-radius: 50%;
+    }
+        :root {
+            --neon-blue: #00f0ff;
+            --neon-purple: #7b2dff;
+            --electric-pink: #ff00f0;
+            --dark-bg: #0a0a12;
+            --darker-bg: #050508;
+            --glass-bg: rgba(255, 255, 255, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(123, 45, 255, 0.15) 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(0, 240, 255, 0.15) 0%, transparent 30%);
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--darker-bg);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--neon-blue);
+            border-radius: 4px;
+        }
+
+        /* Hero Section */
+        .hero {
+            height: 100vh;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             justify-content: center;
-            margin: 0 auto 15px;
-            color: var(--primary);
-            font-size: 24px;
-        }
-        
-        .post-project-title {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .post-project-desc {
-            color: var(--gray);
-            font-size: 14px;
-            max-width: 300px;
-            margin: 0 auto;
-        }
-        
-        .project-title {
-            font-size: 20px;
-            font-weight: 700;
-            margin-bottom: 15px;
-            display: flex;
             align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            padding: 0 20px;
+            background: linear-gradient(to bottom, var(--darker-bg), var(--dark-bg));
         }
-        
-        .project-status {
-            font-size: 12px;
-            font-weight: 600;
-            padding: 4px 10px;
-            border-radius: 20px;
-            margin-left: 12px;
-            background-color: rgba(16, 185, 129, 0.1);
-            color: var(--success);
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at center, var(--neon-blue) 0%, transparent 70%),
+                radial-gradient(circle at 30% 30%, var(--neon-purple) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, var(--electric-pink) 0%, transparent 50%);
+            opacity: 0.3;
+            animation: rotateGradient 30s linear infinite;
+            z-index: -1;
         }
-        
-        .project-meta {
+
+        @keyframes rotateGradient {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 10px rgba(0, 240, 255, 0.3); }
+            to { text-shadow: 0 0 20px rgba(0, 240, 255, 0.6), 0 0 30px rgba(123, 45, 255, 0.4); }
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            max-width: 800px;
+            margin-bottom: 3rem;
+            opacity: 0.9;
+        }
+
+        .cta-buttons {
             display: flex;
-            flex-wrap: wrap;
             gap: 20px;
-            margin-bottom: 20px;
+            margin-top: 2rem;
         }
-        
-        .meta-item {
-            display: flex;
-            align-items: center;
-            color: var(--dark-light);
-            font-size: 14px;
+
+        .btn {
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            border: none;
+            z-index: 1;
         }
-        
-        .meta-item i {
-            margin-right: 8px;
-            color: var(--primary);
-            font-size: 15px;
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.5);
         }
-        
-        .progress-container {
-            margin-bottom: 25px;
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.8);
         }
-        
-        .progress-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--neon-blue);
+            border: 2px solid var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.3);
         }
-        
-        .progress-label {
-            font-size: 14px;
-            font-weight: 500;
+
+        .btn-secondary:hover {
+            background: rgba(0, 240, 255, 0.1);
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.5);
         }
-        
-        .progress-percent {
-            font-weight: 600;
-            color: var(--primary);
+
+        /* Floating Construction Elements */
+        .floating-elements {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
         }
-        
-        .progress-bar {
-            height: 10px;
-            background-color: var(--gray-light);
-            border-radius: 5px;
+
+        .floating-element {
+            position: absolute;
+            opacity: 0.7;
+            filter: drop-shadow(0 0 5px rgba(0, 240, 255, 0.7));
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 100px 20px;
+            background-color: var(--dark-bg);
+            position: relative;
             overflow: hidden;
         }
-        
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--electric-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .steps-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .step-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            width: 300px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .step-card:hover {
+            transform: translateY(-10px) rotateX(5deg);
+            box-shadow: 0 15px 40px rgba(0, 240, 255, 0.2);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+        }
+
+        .step-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
+            transform: rotate(45deg);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .step-card:hover::before {
+            opacity: 1;
+        }
+
+        .step-icon {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .step-title {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        .step-description {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        /* Projects Section */
+        .projects {
+            padding: 100px 20px;
+            background-color: var(--darker-bg);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .project-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(123, 45, 255, 0.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(123, 45, 255, 0.2);
+            border: 1px solid rgba(123, 45, 255, 0.3);
+        }
+
+        .project-image {
+            height: 200px;
+            background: linear-gradient(45deg, #2a0845, #6441A5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .project-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(0, 240, 255, 0.1));
+            animation: shine 3s infinite;
+        }
+
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .project-info {
+            padding: 20px;
+        }
+
+        .project-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--neon-blue);
+        }
+
+        .project-meta {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 3px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
         .progress-fill {
             height: 100%;
-            background-color: var(--primary);
-            width: 45%;
-            border-radius: 5px;
-            transition: width 0.5s ease;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            border-radius: 3px;
+            width: 80%;
+            position: relative;
         }
-        
-        .thekedar-info {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding: 15px;
-            background-color: rgba(249, 250, 251, 0.7);
-            border-radius: 8px;
-            border: 1px solid var(--gray-light);
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            animation: progressShine 2s infinite;
         }
-        
-        .thekedar-avatar {
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            background-color: var(--primary);
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: 700;
-            font-size: 18px;
-            margin-right: 15px;
-            flex-shrink: 0;
+
+        @keyframes progressShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
-        
-        .thekedar-details {
-            flex-grow: 1;
-        }
-        
-        .thekedar-name {
-            font-weight: 600;
-            margin-bottom: 3px;
-        }
-        
-        .thekedar-specialty {
-            font-size: 13px;
-            color: var(--gray);
-            margin-bottom: 5px;
-        }
-        
-        .thekedar-status {
-            display: flex;
-            align-items: center;
-            font-size: 12px;
-            font-weight: 500;
-        }
-        
-        .status-indicator {
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: var(--success);
-            margin-right: 6px;
-        }
-        
-        .project-actions {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .features-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 20px;
-        }
-        
-        .feature-card {
-            padding: 20px;
+
+        /* Dashboard Preview */
+        .dashboard-preview {
+            padding: 100px 20px;
+            background-color: var(--dark-bg);
             text-align: center;
+        }
+
+        .dashboard-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            position: relative;
+            perspective: 1000px;
+        }
+
+        .dashboard-mockup {
+            width: 100%;
+            height: 500px;
+            background: linear-gradient(45deg, #1a1a2e, #16213e);
+            border-radius: 15px;
+            transform-style: preserve-3d;
+            transform: rotateX(10deg) rotateY(-5deg);
+            transition: transform 0.5s ease;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(0, 240, 255, 0.2);
+        }
+
+        .dashboard-mockup:hover {
+            transform: rotateX(2deg) rotateY(2deg);
+        }
+
+        .dashboard-mockup::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 50%;
+            background: linear-gradient(45deg, transparent, rgba(0, 240, 255, 0.05), transparent);
+            animation: dashboardShine 4s infinite;
+        }
+
+        @keyframes dashboardShine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .dashboard-features {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
             border-radius: 10px;
-            transition: all 0.3s;
+            padding: 20px;
+            width: 200px;
+            text-align: center;
+            border: 1px solid rgba(0, 240, 255, 0.1);
+            transition: all 0.3s ease;
         }
-        
-        .feature-card:hover {
+
+        .feature:hover {
             transform: translateY(-5px);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 240, 255, 0.1);
         }
-        
+
         .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--neon-blue);
+        }
+
+        /* Testimonials */
+        .testimonials {
+            padding: 100px 20px;
+            background-color: var(--darker-bg);
+        }
+
+        .testimonial-container {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .testimonial {
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(123, 45, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .testimonial::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10px;
+            height: 100%;
+            background: linear-gradient(to bottom, var(--neon-blue), var(--neon-purple));
+        }
+
+        .testimonial-text {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .testimonial-author {
+            font-weight: bold;
+            color: var(--neon-blue);
+        }
+
+        .voice-wave {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            height: 30px;
+            margin-top: 20px;
+        }
+
+        .wave-bar {
+            width: 4px;
+            background: linear-gradient(to top, var(--neon-blue), var(--neon-purple));
+            border-radius: 2px;
+            animation: wave 1.5s infinite ease-in-out;
+            animation-delay: calc(var(--i) * 0.1s);
+        }
+
+        @keyframes wave {
+            0%, 100% { height: 10px; }
+            50% { height: 30px; }
+        }
+
+        /* Final CTA */
+        .final-cta {
+            padding: 150px 20px;
+            text-align: center;
+            background: linear-gradient(135deg, var(--darker-bg), var(--dark-bg));
+            position: relative;
+            overflow: hidden;
+        }
+
+        .final-cta::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 30%, rgba(0, 240, 255, 0.1) 0%, transparent 30%),
+                radial-gradient(circle at 80% 70%, rgba(123, 45, 255, 0.1) 0%, transparent 30%);
+            z-index: -1;
+        }
+
+        .final-cta h2 {
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(90deg, var(--neon-blue), var(--electric-pink));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        .cta-btn {
+            padding: 20px 40px;
+            font-size: 1.2rem;
+            background: linear-gradient(45deg, var(--neon-blue), var(--neon-purple));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+            font-weight: bold;
+        }
+
+        .cta-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 240, 255, 0.8);
+        }
+
+        .cta-btn::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transform: rotate(45deg);
+            animation: btnShine 3s infinite;
+        }
+
+        @keyframes btnShine {
+            0% { transform: translateX(-100%) rotate(45deg); }
+            100% { transform: translateX(100%) rotate(45deg); }
+        }
+
+        /* Drone Animation */
+        .drone {
+            position: absolute;
             width: 50px;
             height: 50px;
-            background-color: rgba(79, 70, 229, 0.1);
-            border-radius: 12px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%2300f0ff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-5-9h10v2H7z"/></svg>') no-repeat center;
+            background-size: contain;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .drone.active {
+            opacity: 1;
+            animation: droneFly 3s forwards;
+        }
+
+        @keyframes droneFly {
+            0% { transform: translate(0, 0) scale(0.5); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translate(calc(100vw - 100px), calc(-100vh + 100px)) scale(0.2); opacity: 0; }
+        }
+
+        /* Footer */
+        footer {
+            padding: 30px 20px;
+            text-align: center;
+            background-color: var(--darker-bg);
+            border-top: 1px solid rgba(0, 240, 255, 0.1);
+        }
+
+        .footer-links {
             display: flex;
-            align-items: center;
             justify-content: center;
-            margin: 0 auto 15px;
-            color: var(--primary);
-            font-size: 20px;
+            gap: 20px;
+            margin-bottom: 20px;
         }
-        
-        .feature-title {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
+
+        .footer-link {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: color 0.3s ease;
         }
-        
-        .feature-count {
-            font-size: 14px;
-            color: var(--gray);
+
+        .footer-link:hover {
+            color: var(--neon-blue);
+        }
+
+        .copyright {
+            opacity: 0.6;
+            font-size: 0.9rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            
+            .steps-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .dashboard-mockup {
+                height: 300px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <!-- Sidebar -->
-        <aside class="sidebar">
-            <div class="logo-container">
-                <a href="dashboard.html" class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    BuildEase
-                </a>
-            </div>
-            <ul class="nav-links">
-                <li class="nav-item">
-                    <a href="index.html" class="nav-link active">
-                        <i class="fas fa-tachometer-alt"></i>
-                        Dashboard
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="post-project.html" class="nav-link">
-                        <i class="fas fa-plus-circle"></i>
-                        Post Project
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="thekedar-profile.html" class="nav-link">
-                        <i class="fas fa-users"></i>
-                        Thekedars
-                        <span class="nav-badge">12</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="progress.html" class="nav-link">
-                        <i class="fas fa-chart-line"></i>
-                        Progress
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="contracts.html" class="nav-link">
-                        <i class="fas fa-file-contract"></i>
-                        Contracts
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="payments.html" class="nav-link">
-                        <i class="fas fa-rupee-sign"></i>
-                        Payments
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="messages.html" class="nav-link">
-                        <i class="fas fa-envelope"></i>
-                        Messages
-                        <span class="nav-badge">3</span>
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="settings.html" class="nav-link">
-                        <i class="fas fa-cog"></i>
-                        Settings
-                    </a>
-                </li>
-            </ul>
-        </aside>
-        
-        <!-- Main Content -->
-        <main class="main-content">
-            <div class="header">
-                <div class="page-title">
-                    <h1>Welcome, Rajesh</h1>
-                    <p>Track and manage your construction projects</p>
-                </div>
-                <div class="user-menu">
-                    <div class="notification-bell">
-                        <i class="fas fa-bell"></i>
-                        <span class="notification-badge">3</span>
-                    </div>
-                    <div class="user-profile">
-                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Rajesh" class="user-avatar">
-                        <span class="user-name">Rajesh K.</span>
-                        <i class="fas fa-chevron-down" style="color: var(--gray); font-size: 12px;"></i>
-                    </div>
-                </div>
-            </div>
+    <!-- Hero Section -->
+    <section class="hero">
+        <video autoplay muted loop playsinline class="hero-video">
+    <source src="https://assets.mixkit.co/videos/preview/mixkit-construction-site-with-cranes-1588-large.mp4" type="video/mp4">
+    Your browser does not support HTML5 video.
+</video>
+        <div class="floating-elements">
             
-            <!-- Post Project Card -->
-            <div class="card">
-                <div class="card-body post-project-card" onclick="window.location.href='post-project.html'">
-                    <div class="post-project-icon">
-                        <i class="fas fa-home"></i>
-                    </div>
-                    <h3 class="post-project-title">Post Your Project</h3>
-                    <p class="post-project-desc">Describe your job to find thekedars</p>
-                </div>
+            <div class="floating-element" style="top: 20%; left: 10%; transform: rotate(15deg);">
+                <i class="fas fa-hard-hat" style="font-size: 3rem; color: var(--neon-blue);"></i>
             </div>
-            
-            <!-- Active Project Card -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <i class="fas fa-clock"></i>
-                        My Active Project
-                    </h2>
-                    <button class="btn btn-outline btn-sm">
-                        <i class="fas fa-ellipsis-h"></i>
-                    </button>
-                </div>
-                <div class="card-body">
-                    <h3 class="project-title">
-                        Build a 2BHK home in Bangalore
-                        <span class="project-status">ACTIVE</span>
-                    </h3>
-                    <div class="project-meta">
-                        <div class="meta-item">
-                            <i class="fas fa-layer-group"></i>
-                            <span>Construction - Home Building</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-map-marker-alt"></i>
-                            <span>Bangalore</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-rupee-sign"></i>
-                            <span>30,00,000 - 40,00,000</span>
-                        </div>
-                        <div class="meta-item">
-                            <i class="fas fa-calendar-alt"></i>
-                            <span>3 months left</span>
-                        </div>
-                    </div>
-                    
-                    <div class="progress-container">
-                        <div class="progress-header">
-                            <span class="progress-label">Project Progress</span>
-                            <span class="progress-percent">45% complete</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="thekedar-info">
-                        <div class="thekedar-avatar">SK</div>
-                        <div class="thekedar-details">
-                            <div class="thekedar-name">Thekedar Sunil Kumar</div>
-                            <div class="thekedar-specialty">Home Construction Specialist</div>
-                            <div class="thekedar-status">
-                                <span class="status-indicator"></span>
-                                <span>Currently on site</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="project-actions">
-                        <button class="btn btn-outline">
-                            <i class="fas fa-eye"></i>
-                            View Details
-                        </button>
-                        <button class="btn btn-primary">
-                            <i class="fas fa-map-marked-alt"></i>
-                            Site Visit
-                        </button>
-                        <button class="btn btn-secondary">
-                            <i class="fas fa-hand-holding-usd"></i>
-                            Tip Worker
-                        </button>
-                    </div>
-                </div>
+            <div class="floating-element" style="top: 70%; left: 80%; transform: rotate(-10deg);">
+                <i class="fas fa-tools" style="font-size: 2.5rem; color: var(--neon-purple);"></i>
             </div>
-            
-            <!-- Features Grid -->
-            <div class="card">
-                <div class="card-header">
-                    <h2 class="card-title">
-                        <i class="fas fa-star"></i>
-                        Features
-                    </h2>
-                </div>
-                <div class="card-body">
-                    <div class="features-grid">
-                        <div class="card feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-wifi"></i>
-                            </div>
-                            <h3 class="feature-title">Offline Support</h3>
-                            <p class="feature-count">10 Projects</p>
-                        </div>
-                        <div class="card feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-phone-alt"></i>
-                            </div>
-                            <h3 class="feature-title">Emergency Helpline</h3>
-                            <p class="feature-count">3 Projects</p>
-                        </div>
-                        <div class="card feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-search"></i>
-                            </div>
-                            <h3 class="feature-title">Research Optional</h3>
-                            <p class="feature-count">Rewards Optional</p>
-                        </div>
-                        <div class="card feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-video"></i>
-                            </div>
-                            <h3 class="feature-title">Time-lapse</h3>
-                            <p class="feature-count">Time-lap Optional</p>
-                        </div>
-                        <div class="card feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-cog"></i>
-                            </div>
-                            <h3 class="feature-title">Optional Feature</h3>
-                            <p class="feature-count">10 Projects</p>
-                        </div>
-                        <div class="card feature-card">
-                            <div class="feature-icon">
-                                <i class="fas fa-folder"></i>
-                            </div>
-                            <h3 class="feature-title">Projects</h3>
-                            <p class="feature-count">3 Projects</p>
-                        </div>
-                    </div>
-                </div>
+            <div class="floating-element" style="top: 40%; left: 85%; transform: rotate(5deg);">
+                <i class="fas fa-ruler-combined" style="font-size: 2rem; color: var(--electric-pink);"></i>
             </div>
-        </main>
-    </div>
+        </div>
+        <h1>WorkLA</h1>
+        <p>The AI-powered platform that revolutionizes construction workforce management by connecting you with complete, pre-assembled teams led by verified Thekedars.</p>
+        <div class="cta-buttons">
+            <a href="dashboard.html"><button class="btn btn-primary">Find a Squad →</button></a>
+            <button class="btn btn-secondary">Become a Thekedar →</button>
+        </div>
+    </section>
 
-    <script>
-        // Simulate progress animation
-        setTimeout(() => {
-            document.querySelector('.progress-fill').style.width = '45%';
-        }, 300);
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <h2 class="section-title">How It Works</h2>
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-clipboard-list"></i>
+                </div>
+                <h3 class="step-title">Pick a Project</h3>
+                <p class="step-description">Describe your construction needs and our AI will match you with the perfect pre-assembled teams.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <h3 class="step-title">Choose a Thekedar</h3>
+                <p class="step-description">Browse verified team leaders with ratings, skills, and past project portfolios.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-icon">
+                    <i class="fas fa-rocket"></i>
+                </div>
+                <h3 class="step-title">Deploy the Team</h3>
+                <p class="step-description">Your complete construction squad arrives on-site within 24 hours, ready to work.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Projects -->
+    <section class="projects">
+        <h2 class="section-title">Featured Projects</h2>
+        <div class="projects-grid">
+            <div class="project-card">
+                <!-- Replace the empty project-image divs with this: -->
+<div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80'); background-size: cover; background-position: center;"></div>
+                <div class="project-info">
+                    <h3 class="project-title">Skyline Tower</h3>
+                    <div class="project-meta">
+                        <span>New York, NY</span>
+                        <span>45 Workers</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                    <div class="project-meta">
+                        <span>Progress: 80%</span>
+                        <span>Thekedar: Ramesh Patel ⭐ 4.9</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                <div class="project-info">
+                    <h3 class="project-title">Riverfront Residences</h3>
+                    <div class="project-meta">
+                        <span>Mumbai, India</span>
+                        <span>32 Workers</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%;"></div>
+                    </div>
+                    <div class="project-meta">
+                        <span>Progress: 65%</span>
+                        <span>Thekedar: Amit Sharma ⭐ 4.7</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                 <div class="project-image" style="background-image: url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80');"></div>
+                <div class="project-info">
+                    <h3 class="project-title">Tech Park Expansion</h3>
+                    <div class="project-meta">
+                        <span>Bangalore, India</span>
+                        <span>58 Workers</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 45%;"></div>
+                    </div>
+                    <div class="project-meta">
+                        <span>Progress: 45%</span>
+                        <span>Thekedar: Priya Patel ⭐ 4.8</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Preview -->
+    
+        <!-- Updated Dashboard HTML -->
+<section class="dashboard-preview">
+    <h2 class="section-title">AI-Powered Dashboard</h2>
+    <div class="dashboard-container">
+        <div class="dashboard-mockup">
+            <div class="dashboard-element dashboard-element-1"></div>
+            <div class="dashboard-element dashboard-element-2"></div>
+            <div class="dashboard-element dashboard-element-3"></div>
+        </div>
+    </div>
+    <div class="dashboard-features">
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fas fa-map-marked-alt"></i>
+            </div>
+            <h3>Real-time Tracking</h3>
+            <p>Live GPS monitoring of all teams</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fas fa-money-bill-wave"></i>
+            </div>
+            <h3>Automated Payroll</h3>
+            <p>Blockchain-powered payments</p>
+        </div>
+        <div class="feature">
+            <div class="feature-icon">
+                <i class="fas fa-brain"></i>
+            </div>
+            <h3>Skill Analytics</h3>
+            <p>AI suggests optimal team combos</p>
+        </div>
+    </div>
+</section>
+
+<!-- Add this JavaScript for smoother interactions -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dashboard = document.querySelector('.dashboard-mockup');
         
-        // Interactive elements
-        document.querySelectorAll('.btn').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const action = this.textContent.trim();
-                if (!this.getAttribute('href') && !this.getAttribute('type')) {
-                    alert(`Action: ${action} - This would trigger the ${action} functionality`);
+        // Smoother 3D parallax effect
+        dashboard.addEventListener('mousemove', (e) => {
+            const xAxis = (window.innerWidth / 2 - e.pageX) / 30;
+            const yAxis = (window.innerHeight / 2 - e.pageY) / 30;
+            
+            // Use requestAnimationFrame for smoother animation
+            requestAnimationFrame(() => {
+                dashboard.style.transform = `rotateX(${yAxis + 8}deg) rotateY(${-xAxis - 3}deg)`;
+            });
+        });
+        
+        dashboard.addEventListener('mouseleave', () => {
+            // Animate back to original position
+            dashboard.style.transition = 'transform 0.8s cubic-bezier(0.16, 1, 0.3, 1)';
+            dashboard.style.transform = 'rotateX(8deg) rotateY(-3deg)';
+            
+            // Remove transition after animation completes
+            setTimeout(() => {
+                dashboard.style.transition = '';
+            }, 800);
+        });
+        
+        // Animate dashboard elements on scroll into view
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
                 }
             });
+        }, { threshold: 0.1 });
+        
+        document.querySelectorAll('.dashboard-element').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'all 0.6s cubic-bezier(0.16, 1, 0.3, 1)';
+            observer.observe(el);
+        });
+    });
+</script>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <h2 class="section-title">What Our Clients Say</h2>
+        <div class="testimonial-container">
+            <div class="testimonial">
+                <p class="testimonial-text">"BuildEase cut our hiring time by 70%. Just book a Thekedar and the whole team arrives! The quality of work has been exceptional across all our projects."</p>
+                <p class="testimonial-author">— Ajay Mehta, MegaBuild Inc.</p>
+                <div class="voice-wave">
+                    <div class="wave-bar" style="--i: 0;"></div>
+                    <div class="wave-bar" style="--i: 1;"></div>
+                    <div class="wave-bar" style="--i: 2;"></div>
+                    <div class="wave-bar" style="--i: 3;"></div>
+                    <div class="wave-bar" style="--i: 4;"></div>
+                    <div class="wave-bar" style="--i: 5;"></div>
+                    <div class="wave-bar" style="--i: 6;"></div>
+                    <div class="wave-bar" style="--i: 7;"></div>
+                </div>
+            </div>
+            <div class="testimonial">
+                <p class="testimonial-text">"As a Thekedar, BuildEase has given me access to bigger projects and a steady stream of work. Managing my team has never been easier with their tools."</p>
+                <p class="testimonial-author">— Ramesh Patel, Star Construction</p>
+                <div class="voice-wave">
+                    <div class="wave-bar" style="--i: 0;"></div>
+                    <div class="wave-bar" style="--i: 1;"></div>
+                    <div class="wave-bar" style="--i: 2;"></div>
+                    <div class="wave-bar" style="--i: 3;"></div>
+                    <div class="wave-bar" style="--i: 4;"></div>
+                    <div class="wave-bar" style="--i: 5;"></div>
+                    <div class="wave-bar" style="--i: 6;"></div>
+                    <div class="wave-bar" style="--i: 7;"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="final-cta">
+        <h2>Build Faster. Build Smarter.</h2>
+        <button class="cta-btn" id="main-cta">GET STARTED — Join the Revolution</button>
+        <div class="drone" id="drone"></div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-links">
+            <a href="#" class="footer-link">About Us</a>
+            <a href="#" class="footer-link">How It Works</a>
+            <a href="#" class="footer-link">For Thekedars</a>
+            <a href="#" class="footer-link">Contact</a>
+        </div>
+        <p class="copyright">© 2025 BuildEase. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Floating elements animation
+        document.querySelectorAll('.floating-element').forEach(el => {
+            const startX = Math.random() * 80 + 10;
+            const startY = Math.random() * 80 + 10;
+            const amplitude = 5 + Math.random() * 10;
+            const period = 5 + Math.random() * 10;
+            
+            function float() {
+                const time = Date.now() / 1000;
+                const x = startX + amplitude * Math.sin(time / period);
+                const y = startY + amplitude * Math.cos(time / (period * 1.3));
+                el.style.left = `${x}%`;
+                el.style.top = `${y}%`;
+                requestAnimationFrame(float);
+            }
+            
+            float();
+        });
+
+        // Drone animation
+        const ctaBtn = document.getElementById('main-cta');
+        const drone = document.getElementById('drone');
+
+        let hoverTimer;
+        ctaBtn.addEventListener('mouseenter', () => {
+            hoverTimer = setTimeout(() => {
+                drone.classList.add('active');
+                setTimeout(() => {
+                    drone.classList.remove('active');
+                }, 3000);
+            }, 3000);
+        });
+
+        ctaBtn.addEventListener('mouseleave', () => {
+            clearTimeout(hoverTimer);
+        });
+
+        // Parallax effect for dashboard
+        const dashboard = document.querySelector('.dashboard-mockup');
+        if (dashboard) {
+            dashboard.addEventListener('mousemove', (e) => {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+                dashboard.style.transform = `rotateX(${yAxis}deg) rotateY(${xAxis}deg)`;
+            });
+
+            dashboard.addEventListener('mouseleave', () => {
+                dashboard.style.transform = 'rotateX(10deg) rotateY(-5deg)';
+            });
+        }
+
+        // Animate progress bars on scroll
+        function animateProgressBars() {
+            const progressBars = document.querySelectorAll('.progress-fill');
+            progressBars.forEach(bar => {
+                const targetWidth = bar.style.width;
+                bar.style.width = '0';
+                setTimeout(() => {
+                    bar.style.width = targetWidth;
+                }, 100);
+            });
+        }
+
+        // Intersection Observer for scroll animations
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    if (entry.target.classList.contains('projects')) {
+                        animateProgressBars();
+                    }
+                    entry.target.classList.add('animated');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => {
+            observer.observe(section);
         });
     </script>
 </body>

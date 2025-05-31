@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildEase - Thekedar Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Thekedar Profile Page Specific Styles */
+        .thekedar-profile {
+            display: flex;
+            gap: 30px;
+        }
+        
+        .thekedar-sidebar {
+            width: 300px;
+            flex-shrink: 0;
+        }
+        
+        .thekedar-main {
+            flex-grow: 1;
+        }
+        
+        .profile-card {
+            text-align: center;
+            padding: 30px 20px;
+        }
+        
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 15px;
+            border: 5px solid white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .profile-name {
+            font-size: 22px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .profile-title {
+            color: var(--gray);
+            margin-bottom: 15px;
+            font-size: 15px;
+        }
+        
+        .profile-rating {
+            margin-bottom: 20px;
+        }
+        
+        .rating-stars {
+            color: #FBBF24;
+            font-size: 18px;
+            margin-bottom: 5px;
+        }
+        
+        .rating-text {
+            font-size: 14px;
+            color: var(--gray);
+        }
+        
+        .profile-meta {
+            margin: 25px 0;
+        }
+        
+        .meta-item {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--gray-light);
+        }
+        
+        .meta-item:last-child {
+            border-bottom: none;
+        }
+        
+        .meta-icon {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(79, 70, 229, 0.1);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        
+        .meta-content h4 {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+        
+        .meta-content p {
+            font-size: 13px;
+            color: var(--gray);
+        }
+        
+        .portfolio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .portfolio-item {
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            height: 180px;
+        }
+        
+        .portfolio-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        
+        .portfolio-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            padding: 15px;
+            color: white;
+        }
+        
+        .portfolio-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .portfolio-location {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+        
+        .portfolio-item:hover .portfolio-image {
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <a href="new.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-home"></i>
+                    </div>
+                    BuildEase
+                </a>
+            </div>
+            <ul class="nav-links">
+                <li class="nav-item">
+                    <a href="dashboard.html" class="nav-link">
+                        <i class="fas fa-tachometer-alt"></i>
+                        Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="post-project.html" class="nav-link">
+                        <i class="fas fa-plus-circle"></i>
+                        Post Project
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="thekedar-profile.html" class="nav-link active">
+                        <i class="fas fa-users"></i>
+                        Thekedars
+                        <span class="nav-badge">12</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="progress.html" class="nav-link">
+                        <i class="fas fa-chart-line"></i>
+                        Progress
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="contracts.html" class="nav-link">
+                        <i class="fas fa-file-contract"></i>
+                        Contracts
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="payments.html" class="nav-link">
+                        <i class="fas fa-rupee-sign"></i>
+                        Payments
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="messages.html" class="nav-link">
+                        <i class="fas fa-envelope"></i>
+                        Messages
+                        <span class="nav-badge">3</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="settings.html" class="nav-link">
+                        <i class="fas fa-cog"></i>
+                        Settings
+                    </a>
+                </li>
+            </ul>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="header">
+                <div class="page-title">
+                    <h1>Thekedar Profile</h1>
+                    <p>View details and past projects of your thekedar</p>
+                </div>
+                <div class="user-menu">
+                    <button class="btn btn-outline">
+                        <i class="fas fa-chevron-left"></i>
+                        Back to List
+                    </button>
+                </div>
+            </div>
+            
+            <div class="thekedar-profile">
+                <div class="thekedar-sidebar">
+                    <div class="card profile-card">
+                        <img src="https://randomuser.me/api/portraits/men/45.jpg" alt="Sunil Kumar" class="profile-avatar">
+                        <h2 class="profile-name">Sunil Kumar</h2>
+                        <p class="profile-title">Home Construction Specialist</p>
+                        
+                        <div class="profile-rating">
+                            <div class="rating-stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                            <div class="rating-text">
+                                4.7 from 28 reviews
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" style="width: 100%; margin-bottom: 20px;">
+                            <i class="fas fa-phone-alt"></i>
+                            Call Thekedar
+                        </button>
+                        <button class="btn btn-outline" style="width: 100%;">
+                            <i class="fas fa-envelope"></i>
+                            Send Message
+                        </button>
+                        
+                        <div class="profile-meta">
+                            <div class="meta-item">
+                                <div class="meta-icon">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                </div>
+                                <div class="meta-content">
+                                    <h4>Location</h4>
+                                    <p>Bangalore, Karnataka</p>
+                                </div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-icon">
+                                    <i class="fas fa-clock"></i>
+                                </div>
+                                <div class="meta-content">
+                                    <h4>Experience</h4>
+                                    <p>12 years in construction</p>
+                                </div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-icon">
+                                    <i class="fas fa-home"></i>
+                                </div>
+                                <div class="meta-content">
+                                    <h4>Specialization</h4>
+                                    <p>Residential buildings, 2-3BHK homes</p>
+                                </div>
+                            </div>
+                            <div class="meta-item">
+                                <div class="meta-icon">
+                                    <i class="fas fa-language"></i>
+                                </div>
+                                <div class="meta-content">
+                                    <h4>Languages</h4>
+                                    <p>Hindi, English, Kannada</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="thekedar-main">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="fas fa-briefcase"></i>
+                                Portfolio
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <p>Here are some of Sunil Kumar's completed projects:</p>
+                            
+                            <div class="portfolio-grid">
+                                <div class="portfolio-item">
+                                    <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Modern Villa" class="portfolio-image">
+                                    <div class="portfolio-overlay">
+                                        <h3 class="portfolio-title">Modern 3BHK Villa</h3>
+                                        <p class="portfolio-location">Whitefield, Bangalore</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <img src="https://images.unsplash.com/photo-1605276374104-dee2a0ed3cd6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Townhouse" class="portfolio-image">
+                                    <div class="portfolio-overlay">
+                                        <h3 class="portfolio-title">2BHK Townhouse</h3>
+                                        <p class="portfolio-location">Sarjapur Road, Bangalore</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Duplex" class="portfolio-image">
+                                    <div class="portfolio-overlay">
+                                        <h3 class="portfolio-title">Duplex House</h3>
+                                        <p class="portfolio-location">Electronic City, Bangalore</p>
+                                    </div>
+                                </div>
+                                <div class="portfolio-item">
+                                    <img src="https://images.unsplash.com/photo-1600607688969-a5bfcd646154?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" alt="Apartment" class="portfolio-image">
+                                    <div class="portfolio-overlay">
+                                        <h3 class="portfolio-title">Apartment Renovation</h3>
+                                        <p class="portfolio-location">Koramangala, Bangalore</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card" style="margin-top: 25px;">
+                        <div class="card-header">
+                            <h2 class="card-title">
+                                <i class="fas fa-star"></i>
+                                Reviews
+                            </h2>
+                        </div>
+                        <div class="card-body">
+                            <div class="review">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                    <div>
+                                        <strong>Rahul Sharma</strong>
+                                        <div class="rating-stars" style="font-size: 14px; margin-top: 3px;">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                        </div>
+                                    </div>
+                                    <span style="color: var(--gray); font-size: 13px;">2 months ago</span>
+                                </div>
+                                <p>Sunil completed our 2BHK home construction on time and within budget. His team was professional and the quality of work was excellent. Highly recommended!</p>
+                            </div>
+                            
+                            <div class="review" style="margin-top: 25px; padding-top: 25px; border-top: 1px solid var(--gray-light);">
+                                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                                    <div>
+                                        <strong>Priya Patel</strong>
+                                        <div class="rating-stars" style="font-size: 14px; margin-top: 3px;">
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star"></i>
+                                            <i class="fas fa-star-half-alt"></i>
+                                        </div>
+                                    </div>
+                                    <span style="color: var(--gray); font-size: 13px;">4 months ago</span>
+                                </div>
+                                <p>Good experience overall. There were some delays due to rain, but Sunil kept us informed throughout the process. The final result was worth the wait.</p>
+                            </div>
+                            
+                            <button class="btn btn-outline" style="margin-top: 20px;">
+                                <i class="fas fa-comment-alt"></i>
+                                Leave a Review
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Interactive elements
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const action = this.textContent.trim();
+                if (!this.getAttribute('href') && !this.getAttribute('type')) {
+                    alert(`Action: ${action} - This would trigger the ${action} functionality`);
+                }
+            });
+        });
+    </script>
+</body>
+</html>

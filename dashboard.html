@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildEase - Your Construction Partner</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .app-container {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    min-height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: white;
+    box-shadow: 2px 0 15px rgba(0, 0, 0, 0.05);
+    padding: 25px 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    z-index: 100;
+}
+
+.logo-container {
+    padding: 0 25px 25px;
+    border-bottom: 1px solid var(--gray-light);
+    margin-bottom: 20px;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+.logo-icon {
+    width: 36px;
+    height: 36px;
+    background-color: var(--primary);
+    color: white;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 18px;
+}
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        
+        .logo img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: var(--dark);
+        }
+        
+        .nav-item:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .nav-item.active {
+            background-color: var(--primary-light);
+            color: white;
+        }
+        
+        .nav-item i {
+            font-size: 1.1rem;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .user-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .user-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            width: 300px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-bar input {
+            border: none;
+            outline: none;
+            width: 100%;
+            padding: 0.5rem;
+        }
+        
+        .search-bar i {
+            color: var(--gray);
+        }
+        
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            color: white;
+            padding: 2rem;
+            border-radius: 1rem;
+            margin-bottom: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .welcome-banner::before {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+        }
+        
+        .welcome-banner h2 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .welcome-banner p {
+            max-width: 600px;
+            margin-bottom: 1.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .btn-primary {
+            background: white;
+            color: var(--primary);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-card h3 {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .change {
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        
+        .change.positive {
+            color: var(--secondary);
+        }
+        
+        .change.negative {
+            color: var(--danger);
+        }
+        
+        /* Active Project */
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .project-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        
+        .project-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+        
+        .project-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 1rem;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+        
+        .status-active {
+            background: #d1fae5;
+            color: var(--secondary);
+        }
+        
+        .project-details {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .detail-item h4 {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 0.25rem;
+        }
+        
+        .detail-item p {
+            font-weight: 500;
+        }
+        
+        .progress-container {
+            margin-bottom: 1.5rem;
+        }
+        
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            border-radius: 4px;
+            width: 45%;
+        }
+        
+        .project-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: var(--primary-light);
+            color: white;
+        }
+        
+        /* Recent Updates */
+        .updates-container {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .update-item {
+            display: flex;
+            gap: 1rem;
+            padding: 1rem 0;
+            border-bottom: 1px solid #f1f5f9;
+        }
+        
+        .update-item:last-child {
+            border-bottom: none;
+        }
+        
+        .update-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        
+        .update-content h4 {
+            font-size: 0.9rem;
+            margin-bottom: 0.25rem;
+        }
+        
+        .update-content p {
+            font-size: 0.8rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        .update-time {
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+        
+        /* How It Works Section */
+        .how-it-works {
+            margin-top: 3rem;
+        }
+        
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+        
+        .step-card {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .step-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 1.5rem;
+        }
+        
+        .step-card h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .step-card p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .project-details {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .steps-container {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .project-details {
+                grid-template-columns: 1fr;
+            }
+            
+            .steps-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <a href="new.html" >
+            <div class="logo">
+                <i class="fas fa-home"></i></a>
+                <h1 >BuildEase</h1>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="post-project.html" class="nav-item">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Post Project</span>
+                </a>
+                <a href="thekedar-profile.html" class="nav-item">
+                    <i class="fas fa-users"></i>
+                    <span>Thekedars</span>
+                </a>
+                <a href="progress.html" class="nav-item">
+                    <i class="fas fa-tasks"></i>
+                    <span>Progress</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Contracts</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-rupee-sign"></i>
+                    <span>Payments</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="user-profile">
+                    <div class="user-avatar">R</div>
+                    <div class="user-info">
+                        <h3>Rajesh Kumar</h3>
+                        <p>Homeowner</p>
+                    </div>
+                </div>
+                
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search projects, thekedars...">
+                </div>
+            </div>
+            
+            <!-- Welcome Banner -->
+            <div class="welcome-banner">
+                <h2>Build Your Dream Home With Ease</h2>
+                <p>From finding the right contractor to tracking progress, we make construction simple and transparent. Start your journey today.</p>
+                <button class="btn btn-primary">
+                    <i class="fas fa-plus"></i>
+                    Post Your Project
+                </button>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3>Active Projects</h3>
+                    <div class="value">1</div>
+                    <div class="change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>New project</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Saved Thekedars</h3>
+                    <div class="value">3</div>
+                    <div class="change positive">
+                        <i class="fas fa-arrow-up"></i>
+                        <span>2 new</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Project Budget</h3>
+                    <div class="value">₹35L</div>
+                    <div class="change">
+                        <span>Estimated</span>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3>Days Remaining</h3>
+                    <div class="value">87</div>
+                    <div class="change negative">
+                        <i class="fas fa-arrow-down"></i>
+                        <span>2 days behind</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Active Project -->
+            <h2 class="section-title">Active Project</h2>
+            <div class="project-card">
+                <div class="project-header">
+                    <h3 class="project-title">Build a 2BHK home in Bangalore</h3>
+                    <span class="project-status status-active">ACTIVE</span>
+                </div>
+                
+                <div class="project-details">
+                    <div class="detail-item">
+                        <h4>Category</h4>
+                        <p>Home Construction</p>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <h4>Location</h4>
+                        <p>Bangalore</p>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <h4>Budget</h4>
+                        <p>₹30L - ₹40L</p>
+                    </div>
+                    
+                    <div class="detail-item">
+                        <h4>Timeline</h4>
+                        <p>3 months</p>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-header">
+                        <span>Project Progress</span>
+                        <span>45% complete</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill"></div>
+                    </div>
+                </div>
+                
+                <div class="project-actions">
+                    <button class="btn btn-primary">
+                        <i class="fas fa-tasks"></i>
+                        Track Progress
+                    </button>
+                    <button class="btn btn-outline">
+                        <i class="fas fa-comment"></i>
+                        Message Thekedar
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Recent Updates -->
+            <h2 class="section-title">Recent Updates</h2>
+            <div class="updates-container">
+                <div class="update-item">
+                    <div class="update-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="update-content">
+                        <h4>Electrical Work in Progress</h4>
+                        <p>The electrical team is currently working on wiring for all rooms. Expected completion in 3 days.</p>
+                        <div class="update-time">Today, 10:45 AM</div>
+                    </div>
+                </div>
+                
+                <div class="update-item">
+                    <div class="update-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="update-content">
+                        <h4>Plumbing Work Completed</h4>
+                        <p>All plumbing installations have been completed and inspected.</p>
+                        <div class="update-time">Yesterday, 4:30 PM</div>
+                    </div>
+                </div>
+                
+                <div class="update-item">
+                    <div class="update-icon">
+                        <i class="fas fa-brick"></i>
+                    </div>
+                    <div class="update-content">
+                        <h4>Masonry Work Approved</h4>
+                        <p>The masonry work for the foundation has been approved by the site inspector.</p>
+                        <div class="update-time">2 days ago</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- How It Works -->
+            <div class="how-it-works">
+                <h2 class="section-title">How BuildEase Works</h2>
+                <p>Simple steps to build your dream home</p>
+                
+                <div class="steps-container">
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <h3>1. Post Your Project</h3>
+                        <p>Describe your construction needs with our AI-assisted form</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <h3>2. Find Thekedars</h3>
+                        <p>Browse verified contractors with ratings and portfolios</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <i class="fas fa-handshake"></i>
+                        </div>
+                        <h3>3. Hire & Contract</h3>
+                        <p>Secure agreement with milestone-based payments</p>
+                    </div>
+                    
+                    <div class="step-card">
+                        <div class="step-icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h3>4. Track Progress</h3>
+                        <p>Real-time updates with photos and timeline</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

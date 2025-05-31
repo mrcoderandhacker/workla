@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildEase - Hire Workers</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --secondary: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .sidebar {
+            background: white;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            padding: 1.5rem;
+            position: sticky;
+            top: 0;
+            height: 100vh;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 2rem;
+        }
+        
+        .logo img {
+            width: 40px;
+            height: 40px;
+        }
+        
+        .logo h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+        
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: var(--dark);
+        }
+        
+        .nav-item:hover {
+            background-color: #f1f5f9;
+        }
+        
+        .nav-item.active {
+            background-color: var(--primary-light);
+            color: white;
+        }
+        
+        .nav-item i {
+            font-size: 1.1rem;
+        }
+        
+        /* Main Content Styles */
+        .main-content {
+            padding: 2rem;
+            overflow-y: auto;
+        }
+        
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background-color: var(--primary-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+        }
+        
+        .user-info h3 {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+        
+        .user-info p {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+        
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            width: 300px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .search-bar input {
+            border: none;
+            outline: none;
+            width: 100%;
+            padding: 0.5rem;
+        }
+        
+        .search-bar i {
+            color: var(--gray);
+        }
+        
+        /* Hiring Dashboard */
+        .hiring-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .hiring-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+        }
+        
+        .hiring-tabs {
+            display: flex;
+            gap: 1rem;
+            background: white;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+        
+        .tab.active {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .tab:hover:not(.active) {
+            background: #f1f5f9;
+        }
+        
+        /* Filters Section */
+        .filters {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .filter-group {
+            background: white;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .filter-group select, .filter-group input {
+            border: none;
+            outline: none;
+            background: transparent;
+            font-size: 0.9rem;
+        }
+        
+        /* Workers Grid */
+        .workers-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .worker-card {
+            background: white;
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .worker-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .worker-avatar {
+            width: 100%;
+            height: 180px;
+            background: #e0e7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary);
+            font-size: 3rem;
+        }
+        
+        .worker-details {
+            padding: 1.5rem;
+        }
+        
+        .worker-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+        
+        .worker-specialty {
+            font-size: 0.9rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        .worker-rating {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .worker-rating i {
+            color: var(--warning);
+            font-size: 0.9rem;
+        }
+        
+        .worker-rating span {
+            font-size: 0.9rem;
+            font-weight: 500;
+        }
+        
+        .worker-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .skill-tag {
+            background: #e0e7ff;
+            color: var(--primary);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+        }
+        
+        .worker-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+        
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: var(--primary-light);
+        }
+        
+        .btn-outline {
+            background: transparent;
+            border: 1px solid var(--primary);
+            color: var(--primary);
+        }
+        
+        .btn-outline:hover {
+            background: #e0e7ff;
+        }
+        
+        /* AI Recommendations */
+        .ai-recommendations {
+            background: white;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
+        
+        .ai-header {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .ai-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e0e7ff;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .ai-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .ai-subtitle {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        /* Responsive Styles */
+        @media (max-width: 1200px) {
+            .workers-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            
+            .sidebar {
+                display: none;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .search-bar {
+                width: 100%;
+            }
+            
+            .hiring-header {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+            
+            .hiring-tabs {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .filters {
+                flex-direction: column;
+            }
+            
+            .filter-group {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="logo">
+                <i class="fas fa-home"></i>
+                <h1>BuildEase</h1>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fas fa-th-large"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-plus-circle"></i>
+                    <span>Post Project</span>
+                </a>
+                <a href="workers.html" class="nav-item active">
+                    <i class="fas fa-hard-hat"></i>
+                    <span>Hire Workers</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-tasks"></i>
+                    <span>Progress</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-file-contract"></i>
+                    <span>Contracts</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-rupee-sign"></i>
+                    <span>Payments</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-comments"></i>
+                    <span>Messages</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-cog"></i>
+                    <span>Settings</span>
+                </a>
+            </div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="header">
+                <div class="user-profile">
+                    <div class="user-avatar">PM</div>
+                    <div class="user-info">
+                        <h3>Project Manager</h3>
+                        <p>Hiring for: 2BHK Home Construction</p>
+                    </div>
+                </div>
+                
+                <div class="search-bar">
+                    <i class="fas fa-search"></i>
+                    <input type="text" placeholder="Search workers...">
+                </div>
+            </div>
+            
+            <!-- Hiring Dashboard -->
+            <div class="hiring-header">
+                <h2 class="hiring-title">Hire Skilled Workers</h2>
+                
+                <div class="hiring-tabs">
+                    <div class="tab active">All Workers</div>
+                    <div class="tab">Shortlisted</div>
+                    <div class="tab">Hired</div>
+                    <div class="tab">Rejected</div>
+                </div>
+            </div>
+            
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-group">
+                    <i class="fas fa-filter"></i>
+                    <select>
+                        <option>All Skills</option>
+                        <option>Masonry</option>
+                        <option>Carpentry</option>
+                        <option>Plumbing</option>
+                        <option>Electrical</option>
+                        <option>Painting</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <select>
+                        <option>Bangalore</option>
+                        <option>Delhi</option>
+                        <option>Mumbai</option>
+                        <option>Hyderabad</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <i class="fas fa-star"></i>
+                    <select>
+                        <option>Rating: Any</option>
+                        <option>4+ Stars</option>
+                        <option>3+ Stars</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <i class="fas fa-rupee-sign"></i>
+                    <select>
+                        <option>Budget: Any</option>
+                        <option>₹300-500/day</option>
+                        <option>₹500-800/day</option>
+                        <option>₹800+/day</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <i class="fas fa-bolt"></i>
+                    <select>
+                        <option>Availability</option>
+                        <option>Immediate</option>
+                        <option>Next Week</option>
+                    </select>
+                </div>
+            </div>
+            
+            <!-- AI Recommendations -->
+            <div class="ai-recommendations">
+                <div class="ai-header">
+                    <div class="ai-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div>
+                        <h3 class="ai-title">AI Recommendations</h3>
+                        <p class="ai-subtitle">Based on your project needs, these workers are the best match</p>
+                    </div>
+                </div>
+                
+                <div class="workers-grid">
+                    <!-- Worker Card 1 -->
+                    <div class="worker-card">
+                        <div class="worker-avatar">
+                            <i class="fas fa-user-hard-hat"></i>
+                        </div>
+                        <div class="worker-details">
+                            <h3 class="worker-name">Ramesh Kumar</h3>
+                            <p class="worker-specialty">Masonry Specialist</p>
+                            
+                            <div class="worker-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                                <span>4.7 (28 reviews)</span>
+                            </div>
+                            
+                            <div class="worker-skills">
+                                <span class="skill-tag">Brickwork</span>
+                                <span class="skill-tag">Concrete</span>
+                                <span class="skill-tag">Foundation</span>
+                            </div>
+                            
+                            <div class="worker-actions">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-phone"></i>
+                                    Call Now
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-comment"></i>
+                                    Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Worker Card 2 -->
+                    <div class="worker-card">
+                        <div class="worker-avatar">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="worker-details">
+                            <h3 class="worker-name">Suresh Patel</h3>
+                            <p class="worker-specialty">Electrician</p>
+                            
+                            <div class="worker-rating">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <span>5.0 (15 reviews)</span>
+                            </div>
+                            
+                            <div class="worker-skills">
+                                <span class="skill-tag">Wiring</span>
+                                <span class="skill-tag">Switchboards</span>
+                                <span class="skill-tag">Safety Checks</span>
+                            </div>
+                            
+                            <div class="worker-actions">
+                                <button class="btn btn-primary">
+                                    <i class="fas fa-phone"></i>
+                                    Call Now
+                                </button>
+                                <button class="btn btn-outline">
+                                    <i class="fas fa-comment"></i>
+                                    Message
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- All Workers Grid -->
+            <h3 class="section-title">Available Workers</h3>
+            <div class="workers-grid">
+                <!-- Worker Card 3 -->
+                <div class="worker-card">
+                    <div class="worker-avatar">
+                        <i class="fas fa-user-hard-hat"></i>
+                    </div>
+                    <div class="worker-details">
+                        <h3 class="worker-name">Vijay Singh</h3>
+                        <p class="worker-specialty">Plumber</p>
+                        
+                        <div class="worker-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>4.2 (12 reviews)</span>
+                        </div>
+                        
+                        <div class="worker-skills">
+                            <span class="skill-tag">PVC Pipes</span>
+                            <span class="skill-tag">Water Supply</span>
+                            <span class="skill-tag">Drainage</span>
+                        </div>
+                        
+                        <div class="worker-actions">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-phone"></i>
+                                Call Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-comment"></i>
+                                Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Worker Card 4 -->
+                <div class="worker-card">
+                    <div class="worker-avatar">
+                        <i class="fas fa-user-hard-hat"></i>
+                    </div>
+                    <div class="worker-details">
+                        <h3 class="worker-name">Arun Mehta</h3>
+                        <p class="worker-specialty">Carpenter</p>
+                        
+                        <div class="worker-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>4.5 (20 reviews)</span>
+                        </div>
+                        
+                        <div class="worker-skills">
+                            <span class="skill-tag">Furniture</span>
+                            <span class="skill-tag">Doors</span>
+                            <span class="skill-tag">Woodwork</span>
+                        </div>
+                        
+                        <div class="worker-actions">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-phone"></i>
+                                Call Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-comment"></i>
+                                Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Worker Card 5 -->
+                <div class="worker-card">
+                    <div class="worker-avatar">
+                        <i class="fas fa-user-hard-hat"></i>
+                    </div>
+                    <div class="worker-details">
+                        <h3 class="worker-name">Rajiv Sharma</h3>
+                        <p class="worker-specialty">Painter</p>
+                        
+                        <div class="worker-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.6 (18 reviews)</span>
+                        </div>
+                        
+                        <div class="worker-skills">
+                            <span class="skill-tag">Wall Painting</span>
+                            <span class="skill-tag">Texture</span>
+                            <span class="skill-tag">Waterproofing</span>
+                        </div>
+                        
+                        <div class="worker-actions">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-phone"></i>
+                                Call Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-comment"></i>
+                                Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Worker Card 6 -->
+                <div class="worker-card">
+                    <div class="worker-avatar">
+                        <i class="fas fa-user-hard-hat"></i>
+                    </div>
+                    <div class="worker-details">
+                        <h3 class="worker-name">Deepak Yadav</h3>
+                        <p class="worker-specialty">Labor Supervisor</p>
+                        
+                        <div class="worker-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>4.3 (25 reviews)</span>
+                        </div>
+                        
+                        <div class="worker-skills">
+                            <span class="skill-tag">Team Management</span>
+                            <span class="skill-tag">Quality Control</span>
+                            <span class="skill-tag">Site Supervision</span>
+                        </div>
+                        
+                        <div class="worker-actions">
+                            <button class="btn btn-primary">
+                                <i class="fas fa-phone"></i>
+                                Call Now
+                            </button>
+                            <button class="btn btn-outline">
+                                <i class="fas fa-comment"></i>
+                                Message
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

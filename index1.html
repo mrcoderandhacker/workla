@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BuildEase - Construction Management Platform</title>
+    <script src="https://cdn.jsdelivr.net/npm/react@18.2.0/umd/react.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.2.0/umd/react-dom.production.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/react-router-dom@6.22.0/dist/umd/react-router-dom.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.22.9/Babel.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/framer-motion@10.12.16/dist/framer-motion.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+        .glassmorphism {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .card-hover:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const { BrowserRouter, Routes, Route, Link, useLocation } = ReactRouterDOM;
+        const { motion } = window.FramerMotion;
+
+        // Context for user state
+        const UserContext = React.createContext();
+
+        // Sample data (replace with API calls in a real app)
+        const projectData = {
+            title: "Build a 2BHK home in Bangalore",
+            status: "ACTIVE",
+            category: "Construction - Home Building",
+            location: "Bangalore",
+            budget: "30,00,000 - 40,00,000",
+            timeline: "3 months left",
+            progress: 45,
+            thekedar: {
+                name: "Sunil Kumar",
+                specialization: "Home Construction Specialist",
+                status: "Currently on site",
+                rating: 4.7,
+                reviews: 28,
+                location: "Bangalore, Karnataka",
+                experience: "12 years in construction",
+                specializationDetails: "Residential buildings, 2-3BHK homes",
+                languages: "Hindi, English, Kannada",
+                portfolio: [
+                    { title: "Modern 3BHK Villa", location: "Whitefield, Bangalore" },
+                    { title: "2BHK Townhouse", location: "Sarjapur Road, Bangalore" },
+                    { title: "Duplex House", location: "Electronic City, Bangalore" },
+                    { title: "Apartment Renovation", location: "Koramangala, Bangalore" }
+                ],
+                reviews: [
+                    { name: "Rahul Sharma", rating: 5, date: "2 months ago", text: "Sunil completed our 2BHK home construction on time and within budget. His team was professional and the quality of work was excellent. Highly recommended!" },
+                    { name: "Priya Patel", rating: 4, date: "4 months ago", text: "Good experience overall. There were some delays due to rain, but Sunil kept us informed throughout the process. The final result was worth the wait." }
+                ]
+            },
+            progressTimeline: [
+                { date: "Today, 12 June 2023", title: "Electrical Work in Progress", description: "The electrical team is currently working on wiring for all rooms. Expected completion in 3 days. No issues reported.", image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c" },
+                { date: "5 June 2023", title: "Plumbing Work Completed", description: "All plumbing installations have been completed and inspected. The team has moved to the next phase of construction.", image: "https://images.unsplash.com/photo-1581094286678-3a6d7504b7e5" },
+                { date: "25 May 2023", title: "Brickwork and Structure Completed", description: "The main structure of the house is now complete. All walls are up and the roof has been installed.", image: "https://images.unsplash.com/photo-1560448204-e02f11c3d0e2" },
+                { date: "10 May 2023", title: "Foundation Work Completed", description: "The foundation has been laid and passed inspection. Construction of walls has begun.", image: "https://images.unsplash.com/photo-1504307651254-35680f35678d" },
+                { date: "1 May 2023", title: "Project Started", description: "Construction has officially begun! The site has been prepared and materials have been delivered.", image: "https://images.unsplash.com/photo-1503387762-592afbf18422" }
+            ],
+            milestones: [
+                { name: "Foundation", status: "Completed" },
+                { name: "Structure", status: "Completed" },
+                { name: "Plumbing", status: "Completed" },
+                { name: "Electrical", status: "In Progress" },
+                { name: "Finishing", status: "Pending" }
+            ],
+            attendance: { workersPresent: 92, onTime: 85, overtime: 15 }
+        };
+
+        const workersData = [
+            { name: "Ramesh Kumar", role: "Masonry Specialist", rating: 4.7, reviews: 28, skills: ["Brickwork", "Concrete", "Foundation"], image: "https://images.unsplash.com/photo-1519085360753-afccb1c8e269" },
+            { name: "Suresh Patel", role: "Electrician", rating: 5.0, reviews: 15, skills: ["Wiring", "Switchboards", "Safety Checks"], image: "https://images.unsplash.com/photo-1570215773071-7f1d0d2074cd" },
+            { name: "Vijay Singh", role: "Plumber", rating: 4.2, reviews: 12, skills: ["PVC Pipes", "Water Supply", "Drainage"], image: "https://images.unsplash.com/photo-1581094286678-3a6d7504b7e5" },
+            { name: "Arun Mehta", role: "Carpenter", rating: 4.5, reviews: 20, skills: ["Furniture", "Doors", "Woodwork"], image: "https://images.unsplash.com/photo-1512152272826-4b7a8e0b6953" },
+            { name: "Rajiv Sharma", role: "Painter", rating: 4.6, reviews: 18, skills: ["Wall Painting", "Texture", "Waterproofing"], image: "https://images.unsplash.com/photo-1618221710640-c0eaaa2adb2d" },
+            { name: "Deepak Yadav", role: "Labor Supervisor", rating: 4.3, reviews: 25, skills: ["Team Management", "Quality Control", "Site Supervision"], image: "https://images.unsplash.com/photo-1542744173-05336fcc7ad4" }
+        ];
+
+        // Sidebar Component
+        const Sidebar = () => {
+            const location = useLocation();
+            const navItems = [
+                { name: "Dashboard", path: "/", icon: "🏠" },
+                { name: "Post Project", path: "/post-project", icon: "📝" },
+                { name: "Thekedars", path: "/thekedar-profile", icon: "👷", badge: 12 },
+                { name: "Progress", path: "/progress", icon: "📈" },
+                { name: "Contracts", path: "/contracts", icon: "📜" },
+                { name: "Payments", path: "/payments", icon: "💰" },
+                { name: "Messages", path: "/messages", icon: "✉️", badge: 3 },
+                { name: "Settings", path: "/settings", icon: "⚙️" }
+            ];
+
+            return (
+                <motion.div
+                    className="sidebar bg-white shadow-lg p-6 sticky top-0 h-screen z-50"
+                    initial={{ x: -280 }}
+                    animate={{ x: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="logo-container border-b pb-6 mb-6">
+                        <Link to="/" className="logo flex items-center text-2xl font-bold text-indigo-600">
+                            <span className="logo-icon bg-indigo-600 text-white rounded-lg p-2 mr-3">🏗️</span>
+                            BuildEase
+                        </Link>
+                    </div>
+                    <ul className="nav-links space-y-2">
+                        {navItems.map(item => (
+                            <li key={item.name} className="nav-item">
+                                <Link
+                                    to={item.path}
+                                    className={`nav-link flex items-center p-3 rounded-lg ${location.pathname === item.path ? "bg-indigo-100 text-indigo-600" : "text-gray-800"} hover:bg-indigo-100 hover:text-indigo-600 transition-all`}
+                                >
+                                    <span className="w-6 text-center">{item.icon}</span>
+                                    <span className="ml-3">{item.name}</span>
+                                    {item.badge && (
+                                        <span className="nav-badge ml-auto bg-indigo-600 text-white">{item.badge}</span>
+                                    )}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </motion.div>
+            );
+        };
+
+        // Header Component
+        const Header = ({ title, subtitle }) => {
+            return (
+                <motion.div
+                    className="header flex justify-between items-center mb-8"
+                    initial={{ opacity: 0, y: -20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <div className="page-title">
+                        <h1 className="text-3xl font-bold text-gray-800">{title}</h1>
+                        <p className="text-gray-600 text-sm">{subtitle}</p>
+                    </div>
+                    <div className="user-menu flex items-center">
+                        <div className="notification-bell relative mr-6 cursor-pointer">
+                            <span>🔔</span>
+                            <span className="notification-badge absolute top-[-5px] right-[-5px] bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs border-2 border-white">3</span>
+                        </div>
+                        <div className="user-profile flex items-center">
+                            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e" alt="User Avatar" className="user-avatar w-10 h-10 rounded-full object-cover mr-3 border-2 border-gray-200" />
+                            <span className="user-name font-semibold">Rajesh K.</span>
+                        </div>
+                    </div>
+                </motion.div>
+            );
+        };
+
+        // Dashboard Component
+        const Dashboard = () => {
+            return (
+                <motion.div
+                    className="main-content p-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Header title="Welcome, Rajesh" subtitle="Track and manage your construction projects" />
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <motion.div className="card glassmorphism p-6 card-hover" initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
+                            <div className="card-header">
+                                <h2 className="card-title text-lg font-semibold">My Active Project</h2>
+                            </div>
+                            <div className="card-body">
+                                <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt="Project" className="w-full h-48 object-cover rounded-lg mb-4" />
+                                <h3 className="text-xl font-bold">{projectData.title} <span className="text-green-500 text-sm">{projectData.status}</span></h3>
+                                <p className="text-gray-600">{projectData.category}</p>
+                                <p className="text-gray-600">{projectData.location}</p>
+                                <p className="text-gray-600">{projectData.budget}</p>
+                                <p className="text-gray-600">{projectData.timeline}</p>
+                                <div className="mt-4">
+                                    <p className="text-gray-800 font-semibold">Project Progress: {projectData.progress}% complete</p>
+                                    <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                        <div className="bg-indigo-600 h-2.5 rounded-full" style={{ width: `${projectData.progress}%` }}></div>
+                                    </div>
+                                </div>
+                                <div className="mt-4 flex items-center">
+                                    <span className="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center mr-3">SK</span>
+                                    <div>
+                                        <p className="font-semibold">{projectData.thekedar.name}</p>
+                                        <p className="text-gray-600">{projectData.thekedar.specialization}</p>
+                                        <p className="text-green-500">{projectData.thekedar.status}</p>
+                                    </div>
+                                </div>
+                                <div className="project-actions flex space-x-3 mt-4">
+                                    <button className="btn btn-primary"><span>🔍</span> View Details</button>
+                                    <button className="btn btn-outline"><span>📍</span> Site Visit</button>
+                                    <button className="btn btn-secondary"><span>💸</span> Tip Worker</button>
+                                </div>
+                            </div>
+                        </motion.div>
+                        <motion.div className="card glassmorphism p-6 card-hover" initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}>
+                            <div className="card-header">
+                                <h2 className="card-title text-lg font-semibold">Features</h2>
+                            </div>
+                            <div className="card-body grid grid-cols-2 gap-4">
+                                {["Offline Support", "Emergency Helpline", "Research Optional", "Time-lapse", "Optional Feature", "Projects"].map((feature, index) => (
+                                    <motion.div key={index} className="flex items-center space-x-3" whileHover={{ scale: 1.05 }}>
+                                        <img src="https://images.unsplash.com/photo-1581094286678-3a6d7504b7e5" alt={feature} className="w-12 h-12 rounded-lg object-cover" />
+                                        <div>
+                                            <p className="font-semibold">{feature}</p>
+                                            <p className="text-gray-600 text-sm">{index % 2 === 0 ? "10 Projects" : "3 Projects"}</p>
+                                        </div>
+                                    </motion.div>
+                                ))}
+                            </div>
+                        </motion.div>
+                    </div>
+                </motion.div>
+            );
+        };
+
+        // Post Project Component
+        const PostProject = () => {
+            const [formData, setFormData] = useState({
+                title: "",
+                category: "",
+                location: "",
+                budget: "",
+                timeline: "",
+                description: ""
+            });
+
+            const handleChange = (e) => {
+                setFormData({ ...formData, [e.target.name]: e.target.value });
+            };
+
+            const handleSubmit = (e) => {
+                e.preventDefault();
+                console.log("Project Posted:", formData);
+            };
+
+            return (
+                <motion.div
+                    className="main-content p-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Header title="Post Your Project" subtitle="Fill in details to find the right thekedar for your construction" />
+                    <motion.div className="card glassmorphism p-6 card-hover" initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
+                        <div className="card-header">
+                            <h2 className="card-title text-lg font-semibold">Project Details</h2>
+                        </div>
+                        <div className="card-body">
+                            <form onSubmit={handleSubmit} className="space-y-4">
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">Project Title</label>
+                                    <input type="text" name="title" value={formData.title} onChange={handleChange} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 focus:ring-indigo-600 focus:border-indigo-600" />
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Work Category</label>
+                                        <select name="category" value={formData.category} onChange={handleChange} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 focus:ring-indigo-600 focus:border-indigo-600">
+                                            <option value="">Select category</option>
+                                            {["Construction - Home Building", "Construction - Commercial", "Renovation", "Interior Design", "Plumbing", "Electrical"].map(cat => (
+                                                <option key={cat} value={cat}>{cat}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Location</label>
+                                        <input type="text" name="location" value={formData.location} onChange={handleChange} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 focus:ring-indigo-600 focus:border-indigo-600" />
+                                    </div>
+                                </div>
+                                <div className="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Budget Range</label>
+                                        <select name="budget" value={formData.budget} onChange={handleChange} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 focus:ring-indigo-600 focus:border-indigo-600">
+                                            <option value="">Select budget range</option>
+                                            {["10,00,000 - 20,00,000", "20,00,000 - 30,00,000", "30,00,000 - 40,00,000", "40,00,000 - 50,00,000", "50,00,000+"].map(budget => (
+                                                <option key={budget} value={budget}>{budget}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700">Timeline</label>
+                                        <select name="timeline" value={formData.timeline} onChange={handleChange} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 focus:ring-indigo-600 focus:border-indigo-600">
+                                            <option value="">Select timeline</option>
+                                            {["1-3 months", "3-6 months", "6-12 months", "1+ years"].map(timeline => (
+                                                <option key={timeline} value={timeline}>{timeline}</option>
+                                            ))}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">Project Description</label>
+                                    <textarea name="description" value={formData.description} onChange={handleChange} className="mt-1 block w-full rounded-lg border-gray-300 shadow-sm p-2 focus:ring-indigo-600 focus:border-indigo-600" rows="4"></textarea>
+                                </div>
+                                <div>
+                                    <label className="block text-sm font-medium text-gray-700">Upload Reference Images or Plans</label>
+                                    <div className="mt-1 border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+                                        <input type="file" className="hidden" id="file-upload" />
+                                        <label htmlFor="file-upload" className="cursor-pointer">Drag & drop files here or click to browse</label>
+                                        <p className="text-sm text-gray-500">JPG, PNG or PDF (Max. 10MB)</p>
+                                    </div>
+                                </div>
+                                <div className="flex space-x-3">
+                                    <button type="submit" className="btn btn-primary"><span>📤</span> Post Project</button>
+                                    <button type="button" className="btn btn-gray"><span>❌</span> Cancel</button>
+                                </div>
+                            </form>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            );
+        };
+
+        // Progress Component
+        const Progress = () => {
+            return (
+                <motion.div
+                    className="main-content p-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Header title="Project Progress" subtitle="Track the construction milestones of your 2BHK home in Bangalore" />
+                    <div className="flex justify-end mb-4">
+                        <button className="btn btn-primary"><span>🖨️</span> Print Report</button>
+                    </div>
+                    <motion.div className="card glassmorphism p-6 card-hover" initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
+                        <div className="card-header">
+                            <h2 className="card-title text-lg font-semibold">Progress Timeline</h2>
+                        </div>
+                        <div className="card-body space-y-6">
+                            {projectData.progressTimeline.map((item, index) => (
+                                <motion.div key={index} className="flex items-start space-x-4" initial={{ x: -50, opacity: 0 }} animate={{ x: 0, opacity: 1 }} transition={{ delay: index * 0.1 }}>
+                                    <img src={item.image} alt={item.title} className="w-24 h-24 rounded-lg object-cover" />
+                                    <div>
+                                        <p className="text-sm text-gray-500">{item.date}</p>
+                                        <h3 className="font-semibold">{item.title}</h3>
+                                        <p className="text-gray-600">{item.description}</p>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+                    <motion.div className="card glassmorphism p-6 card-hover" initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}>
+                        <div className="card-header">
+                            <h2 className="card-title text-lg font-semibold">Progress Statistics</h2>
+                        </div>
+                        <div className="card-body space-y-6">
+                            <div>
+                                <h3 className="font-semibold">Completion Progress</h3>
+                                <p className="text-2xl font-bold">{projectData.progress}% <span className="text-gray-600">Completed</span></p>
+                                <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                    <div className="bg-indigo-600 h-2.5 rounded-full" style={{ width: `${projectData.progress}%` }}></div>
+                                </div>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">Milestones</h3>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {projectData.milestones.map((milestone, index) => (
+                                        <div key={index} className="flex items-center space-x-3">
+                                            <span className={`w-4 h-4 rounded-full ${milestone.status === "Completed" ? "bg-green-500" : milestone.status === "In Progress" ? "bg-yellow-500" : "bg-gray-300"}`}></span>
+                                            <p>{milestone.name} <span className="text-gray-600">({milestone.status})</span></p>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">Team Attendance (Last 7 days)</h3>
+                                <div className="grid grid-cols-3 gap-4">
+                                    <div>
+                                        <p className="text-sm text-gray-600">Workers Present</p>
+                                        <p className="text-2xl font-bold">{projectData.attendance.workersPresent}%</p>
+                                        <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div className="bg-indigo-600 h-2.5 rounded-full" style={{ width: `${projectData.attendance.workersPresent}%` }}></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-600">On Time</p>
+                                        <p className="text-2xl font-bold">{projectData.attendance.onTime}%</p>
+                                        <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div className="bg-indigo-600 h-2.5 rounded-full" style={{ width: `${projectData.attendance.onTime}%` }}></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p className="text-sm text-gray-600">Overtime</p>
+                                        <p className="text-2xl font-bold">{projectData.attendance.overtime}%</p>
+                                        <div className="w-full bg-gray-200 rounded-full h-2.5">
+                                            <div className="bg-indigo-600 h-2.5 rounded-full" style={{ width: `${projectData.attendance.overtime}%` }}></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            );
+        };
+
+        // Thekedar Profile Component
+        const ThekedarProfile = () => {
+            return (
+                <motion.div
+                    className="main-content p-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Header title="Thekedar Profile" subtitle="View details and past projects of your thekedar" />
+                    <div className="flex justify-end mb-4">
+                        <Link to="/thekedar-profile" className="btn btn-outline"><span>🔙</span> Back to List</Link>
+                    </div>
+                    <motion.div className="card glassmorphism p-6 card-hover" initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
+                        <div className="card-header">
+                            <h2 className="card-title text-lg font-semibold">{projectData.thekedar.name}</h2>
+                            <p className="text-gray-600">{projectData.thekedar.specialization}</p>
+                        </div>
+                        <div className="card-body">
+                            <div className="flex items-center mb-4">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e" alt="Thekedar" className="w-16 h-16 rounded-full object-cover mr-4" />
+                                <div>
+                                    <p className="font-semibold">{projectData.thekedar.rating} from {projectData.thekedar.reviews} reviews</p>
+                                    <div className="flex">
+                                        {[...Array(5)].map((_, i) => (
+                                            <span key={i} className={i < Math.round(projectData.thekedar.rating) ? "text-yellow-400" : "text-gray-300"}>★</span>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="flex space-x-3 mb-4">
+                                <button className="btn btn-primary"><span>📞</span> Call Thekedar</button>
+                                <button className="btn btn-outline"><span>✉️</span> Send Message</button>
+                            </div>
+                            <div className="grid grid-cols-2 gap-4 mb-4">
+                                <p><strong>Location:</strong> {projectData.thekedar.location}</p>
+                                <p><strong>Experience:</strong> {projectData.thekedar.experience}</p>
+                                <p><strong>Specialization:</strong> {projectData.thekedar.specializationDetails}</p>
+                                <p><strong>Languages:</strong> {projectData.thekedar.languages}</p>
+                            </div>
+                            <div>
+                                <h3 className="font-semibold">Portfolio</h3>
+                                <div className="grid grid-cols-2 gap-4">
+                                    {projectData.thekedar.portfolio.map((project, index) => (
+                                        <motion.div key={index} className="flex items-center space-x-3" whileHover={{ scale: 1.05 }}>
+                                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c" alt={project.title} className="w-16 h-16 rounded-lg object-cover" />
+                                            <div>
+                                                <p className="font-semibold">{project.title}</p>
+                                                <p className="text-gray-600">{project.location}</p>
+                                            </div>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </div>
+                            <div className="mt-6">
+                                <h3 className="font-semibold">Reviews</h3>
+                                {projectData.thekedar.reviews.map((review, index) => (
+                                    <motion.div key={index} className="border-t pt-4 mt-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: index * 0.1 }}>
+                                        <div className="flex items-center">
+                                            <span className="w-10 h-10 bg-indigo-600 text-white rounded-full flex items-center justify-center mr-3">{review.name.charAt(0)}</span>
+                                            <div>
+                                                <p className="font-semibold">{review.name}</p>
+                                                <div className="flex">
+                                                    {[...Array(5)].map((_, i) => (
+                                                        <span key={i} className={i < review.rating ? "text-yellow-400" : "text-gray-300"}>★</span>
+                                                    ))}
+                                                </div>
+                                                <p className="text-gray-600 text-sm">{review.date}</p>
+                                            </div>
+                                        </div>
+                                        <p className="text-gray-600 mt-2">{review.text}</p>
+                                    </motion.div>
+                                ))}
+                                <button className="btn btn-primary mt-4"><span>✍️</span> Leave a Review</button>
+                            </div>
+                        </div>
+                    </motion.div>
+                </motion.div>
+            );
+        };
+
+        // Workers Component
+        const Workers = () => {
+            return (
+                <motion.div
+                    className="main-content p-10"
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    transition={{ duration: 0.5 }}
+                >
+                    <Header title="Hire Skilled Workers" subtitle="Find the best workers for your construction project" />
+                    <motion.div className="card glassmorphism p-6 card-hover" initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
+                        <div className="card-header">
+                            <h2 className="card-title text-lg font-semibold">AI Recommendations</h2>
+                        </div>
+                        <div className="card-body grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {workersData.slice(0, 2).map((worker, index) => (
+                                <motion.div key={index} className="flex items-start space-x-4" whileHover={{ scale: 1.05 }}>
+                                    <img src={worker.image} alt={worker.name} className="w-16 h-16 rounded-lg object-cover" />
+                                    <div>
+                                        <h3 className="font-semibold">{worker.name}</h3>
+                                        <p className="text-gray-600">{worker.role}</p>
+                                        <div className="flex">
+                                            {[...Array(5)].map((_, i) => (
+                                                <span key={i} className={i < Math.round(worker.rating) ? "text-yellow-400" : "text-gray-300"}>★</span>
+                                            ))}
+                                            <span className="text-gray-600 text-sm ml-2">({worker.reviews} reviews)</span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2 mt-2">
+                                            {worker.skills.map((skill, i) => (
+                                                <span key={i} className="bg-indigo-100 text-indigo-600 text-xs px-2 py-1 rounded-full">{skill}</span>
+                                            ))}
+                                        </div>
+                                        <div className="flex space-x-3 mt-3">
+                                            <button className="btn btn-primary btn-sm"><span>📞</span> Call Now</button>
+                                            <button className="btn btn-outline btn-sm"><span>✉️</span> Message</button>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+                    <motion.div className="card glassmorphism p-6 card-hover" initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.4 }}>
+                        <div className="card-header">
+                            <h2 className="card-title text-lg font-semibold">Available Workers</h2>
+                        </div>
+                        <div className="card-body grid grid-cols-1 md:grid-cols-2 gap-6">
+                            {workersData.slice(2).map((worker, index) => (
+                                <motion.div key={index} className="flex items-start space-x-4" whileHover={{ scale: 1.05 }}>
+                                    <img src={worker.image} alt={worker.name} className="w-16 h-16 rounded-lg object-cover" />
+                                    <div>
+                                        <h3 className="font-semibold">{worker.name}</h3>
+                                        <p className="text-gray-600">{worker.role}</p>
+                                        <div className="flex">
+                                            {[...Array(5)].map((_, i) => (
+                                                <span key={i} className={i < Math.round(worker.rating) ? "text-yellow-400" : "text-gray-300"}>★</span>
+                                            ))}
+                                            <span className="text-gray-600 text-sm ml-2">({worker.reviews} reviews)</span>
+                                        </div>
+                                        <div className="flex flex-wrap gap-2 mt-2">
+                                            {worker.skills.map((skill, i) => (
+                                                <span key={i} className="bg-indigo-100 text-indigo-600 text-xs px-2 py-1 rounded-full">{skill}</span>
+                                            ))}
+                                        </div>
+                                        <div className="flex space-x-3 mt-3">
+                                            <button className="btn btn-primary btn-sm"><span>📞</span> Call Now</button>
+                                            <button className="btn btn-outline btn-sm"><span>✉️</span> Message</button>
+                                        </div>
+                                    </div>
+                                </motion.div>
+                            ))}
+                        </div>
+                    </motion.div>
+                </motion.div>
+            );
+        };
+
+        // Placeholder Components for Other Pages
+        const PlaceholderPage = ({ title }) => (
+            <motion.div
+                className="main-content p-10"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+            >
+                <Header title={title} subtitle={`Manage your ${title.toLowerCase()} here`} />
+                <motion.div className="card glassmorphism p-6 card-hover" initial={{ y: 50, opacity: 0 }} animate={{ y: 0, opacity: 1 }} transition={{ delay: 0.2 }}>
+                    <div className="card-header">
+                        <h2 className="card-title text-lg font-semibold">{title}</h2>
+                    </div>
+                    <div className="card-body">
+                        <p className="text-gray-600">This is a placeholder for the {title} page. Implement functionality as needed.</p>
+                    </div>
+                </motion.div>
+            </motion.div>
+        );
+
+        // Main App Component
+        const App = () => {
+            const [user, setUser] = useState({ name: "Rajesh K.", avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e" });
+
+            return (
+                <UserContext.Provider value={{ user, setUser }}>
+                    <BrowserRouter>
+                        <div className="app-container grid grid-cols-1 lg:grid-cols-[280px_1fr] min-h-screen">
+                            <Sidebar />
+                            <Routes>
+                                <Route path="/" element={<Dashboard />} />
+                                <Route path="/post-project" element={<PostProject />} />
+                                <Route path="/progress" element={<Progress />} />
+                                <Route path="/thekedar-profile" element={<ThekedarProfile />} />
+                                <Route path="/workers" element={<Workers />} />
+                                <Route path="/contracts" element={<PlaceholderPage title="Contracts" />} />
+                                <Route path="/payments" element={<PlaceholderPage title="Payments" />} />
+                                <Route path="/messages" element={<PlaceholderPage title="Messages" />} />
+                                <Route path="/settings" element={<PlaceholderPage title="Settings" />} />
+                            </Routes>
+                        </div>
+                    </BrowserRouter>
+                </UserContext.Provider>
+            );
+        };
+
+        // Render the App
+        ReactDOM.render(<App />, document.getElementById("root"));
+    </script>
+</body>
+</html>
